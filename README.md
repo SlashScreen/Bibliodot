@@ -42,7 +42,7 @@ else:
 	return "beep"
 }}
 ```
-This will be replaced with the result of this script. Under the hood, it is turned into a function with the text as the body verbatim. make youre your indentation is proper.  
+This will be replaced with the result of this script. Under the hood, it is turned into a function with the text as the body verbatim. Make sure your indentation is proper.  
 
 #### Other info
 
