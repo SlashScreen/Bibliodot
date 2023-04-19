@@ -2,7 +2,7 @@
 
 *(pronounced bilbio-doe)*  
 
-Bibliodot is a simple package for turning a text file into a series of strings fit for Rich Text Label, complete with embedded GDScript.  
+Bibliodot is a simple package for creating in-game books by turning a text file into a series of strings fit for Rich Text Label, complete with embedded GDScript.  
 
 ## How to use
 
