@@ -2,16 +2,15 @@ extends Node
 
 
 var regex = RegEx.new()
-var exp = Expression.new()
 
 
 func _ready() -> void:
-	regex.compile("\\{\\{(?'flag'%?)(?'code'.*?)\\}\\}")
+	regex.compile("\\{\\{(?'flag'%?)(?'code'(.|\\R)*?)\\}\\}")
 	# test string: "hello {{%return 1+2}}!---This is a {{\"different\" if false else \"cool\"}} page."
 
 
 ## Renders a raw string into a [Book] resource.
-func render_book(raw:String, args:Array = []) -> Book:
+func render_book(raw:String, args:Array = []) -> Array[String]:
 	# STEP 1: Expression Executing
 	
 	var split_raw = []
@@ -24,7 +23,7 @@ func render_book(raw:String, args:Array = []) -> Book:
 		current_end = res.get_end() # set current end
 		var raw_gd = res.get_string("code").strip_escapes() # get string match
 		# apply script to script
-		res_script.source_code = "func eval(args:Array):\n\t%s%s" % ["return" if res.get_string("flag") == "" else "", raw_gd]
+		res_script.source_code = "func eval(args:Array):\n\t%s%s" % ["return" if res.get_string("flag") == "" else "", raw_gd.strip_edges(true, false)]
 		res_script.reload()
 		var obj = RefCounted.new()
 		obj.set_script(res_script)
@@ -33,7 +32,8 @@ func render_book(raw:String, args:Array = []) -> Book:
 		# remove script
 		obj.set_script(null)
 		
-		split_raw.append(exp_res)
+		if not exp_res == null:
+			split_raw.append(exp_res)
 		
 	## append last match to end
 	split_raw.append(raw.substr(current_end))
@@ -42,4 +42,4 @@ func render_book(raw:String, args:Array = []) -> Book:
 	
 	var templated = "".join(split_raw) # join split raw
 	var pages = templated.split("---") # split by page separator
-	return Book.new(pages) # create new book
+	return pages 
